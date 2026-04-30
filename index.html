@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,13 @@
         /* ═══════════════════════════════════════
            RESET & BASE
         ═══════════════════════════════════════ */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --accent: #1a6adb;
@@ -21,6 +28,9 @@
             --muted: #aaa;
             --border: #e8e2d8;
             --panel-bg: #faf8f5;
+            /* Mobile gradient colours */
+            --mob-bg1: #0f1b35;
+            --mob-bg2: #1a2f5a;
         }
 
         body {
@@ -35,17 +45,26 @@
            LAYOUT
         ═══════════════════════════════════════ */
         .page {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 420px 1fr;
+            gap: 24px;
             align-items: start;
         }
 
         @media (max-width: 640px) {
-            .page { grid-template-columns: 1fr; }
-            body { padding: 12px; }
+            .page {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            body {
+                padding: 0;
+                /* Rich dark gradient background for mobile */
+                background: linear-gradient(160deg, #0f1b35 0%, #1c3265 45%, #0d2444 100%);
+                min-height: 100vh;
+            }
         }
 
         /* ═══════════════════════════════════════
@@ -53,96 +72,251 @@
         ═══════════════════════════════════════ */
         .logo-card {
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 48px 32px 40px;
-            box-shadow: 0 20px 56px rgba(0,0,0,0.08);
+            border-radius: 28px;
+            padding: 56px 40px 48px;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, 0.10);
             display: flex;
             flex-direction: column;
             align-items: center;
             position: sticky;
-            top: 16px;
+            top: 20px;
+            /* subtle inner top gradient stripe */
+            border-top: 4px solid transparent;
+            background-clip: padding-box;
         }
 
+        /* Mobile: 40vh tall card, logo centred, premium glass look */
         @media (max-width: 640px) {
-            .logo-card { position: static; padding: 36px 24px 32px; }
+            .logo-card {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                border-radius: 0 0 36px 36px;
+                padding: 20px 24px 28px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                min-height: 42vh;
+                /* glassmorphism on dark bg */
+                background: rgba(255,255,255,0.07);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255,255,255,0.14);
+                border-top: none;
+                box-shadow:
+                    0 8px 40px rgba(0,0,0,0.35),
+                    inset 0 1px 0 rgba(255,255,255,0.12);
+            }
+        }
+
+        /* Shining background keyframe */
+        @keyframes shineSweep {
+            0%   { transform: translateX(-160%) rotate(20deg); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { transform: translateX(260%) rotate(20deg); opacity: 0; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%       { opacity: 1;   transform: scale(1.08); }
         }
 
         .logo-preview-wrap {
-            width: 160px;
-            height: 160px;
+            width: 320px;
+            height: 320px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 20px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            margin-bottom: 4px;
+            border-radius: 32px;
+            /* Rich shining gradient base */
+            background:
+                radial-gradient(ellipse at 25% 20%, rgba(255,255,255,0.55) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 85%, rgba(26,106,219,0.12) 0%, transparent 50%),
+                linear-gradient(135deg, #f0ecff 0%, #e8f0ff 40%, #f5f0ea 100%);
+            border: 1.5px solid rgba(255,255,255,0.8);
+            margin-bottom: 0;
+            position: relative;
+            overflow: hidden;
+            /* Outer glow ring */
+            box-shadow:
+                0 0 0 5px rgba(26,106,219,0.06),
+                0 0 0 10px rgba(26,106,219,0.03),
+                0 16px 48px rgba(0,0,0,0.10),
+                inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
+        /* Shine sweep layer */
+        .logo-preview-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: 60%;
+            height: 200%;
+            top: -50%;
+            left: 0;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255,255,255,0.0) 20%,
+                rgba(255,255,255,0.55) 50%,
+                rgba(255,255,255,0.0) 80%,
+                transparent 100%
+            );
+            animation: shineSweep 3.5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Radial pulsing glow dot (top-left) */
+        .logo-preview-wrap::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: -20px;
+            left: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%);
+            animation: pulseGlow 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Keep logo image on top of shine layers */
+        #logoImg { position: relative; z-index: 2; }
+
         @media (max-width: 640px) {
-            .logo-preview-wrap { width: 130px; height: 130px; }
+            .logo-preview-wrap {
+                width: 62vw;
+                height: 62vw;
+                max-width: 260px;
+                max-height: 260px;
+                border-radius: 28px;
+                margin-bottom: 0;
+                border: 1px solid rgba(255,255,255,0.4);
+                /* Shining white card for mobile */
+                background:
+                    radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.8) 0%, transparent 55%),
+                    radial-gradient(ellipse at 85% 90%, rgba(200,220,255,0.3) 0%, transparent 50%),
+                    linear-gradient(145deg, #ffffff 0%, #eef2ff 50%, #f5f0ea 100%);
+                box-shadow:
+                    0 4px 0 rgba(255,255,255,0.3),
+                    0 20px 60px rgba(0,0,0,0.5),
+                    inset 0 1px 0 rgba(255,255,255,1);
+            }
         }
 
         #logoImg {
-            width: 120px;
-            height: 120px;
+            width: 260px;
+            height: 260px;
             object-fit: contain;
             transition: filter 0.04s linear;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12));
         }
 
         @media (max-width: 640px) {
-            #logoImg { width: 100px; height: 100px; }
+            #logoImg {
+                width: 86%;
+                height: 86%;
+                object-fit: contain;
+                filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
+            }
         }
 
+        /* Mobile bottom label under logo */
+        .mobile-logo-label {
+            display: none;
+        }
+        @media (max-width: 640px) {
+            .mobile-logo-label {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+            }
+            .mobile-logo-label .m-name {
+                font-size: 18px;
+                font-weight: 800;
+                letter-spacing: 5px;
+                text-transform: uppercase;
+                color: rgba(255,255,255,0.92);
+            }
+            .mobile-logo-label .m-tag {
+                font-size: 9px;
+                font-weight: 600;
+                letter-spacing: 3.5px;
+                text-transform: uppercase;
+                color: rgba(255,255,255,0.45);
+            }
+        }
+
+        /* Hide desktop brand text on mobile */
+        @media (max-width: 640px) {
+
+            .brand-name,
+            .brand-tagline,
+            .filter-badge {
+                display: none;
+            }
+        }
+
+        /* Desktop brand text block */
         .brand-name {
-            margin-top: 24px;
-            font-size: 36px;
+            margin-top: 28px;
+            font-size: 40px;
             font-weight: 800;
-            letter-spacing: 6px;
+            letter-spacing: 8px;
             text-transform: uppercase;
             color: var(--text);
             transition: color 0.1s;
             text-align: center;
         }
 
-        @media (max-width: 640px) {
-            .brand-name { font-size: 28px; letter-spacing: 4px; }
-        }
-
         .brand-tagline {
             margin-top: 6px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-transform: uppercase;
             color: var(--muted);
         }
 
         /* Filter badge */
         .filter-badge {
-            margin-top: 18px;
+            margin-top: 20px;
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
-            text-transform: uppercase;
+            text-transform: none;
             background: var(--panel-bg);
             border: 1px solid var(--border);
-            border-radius: 99px;
-            padding: 5px 14px;
+            border-radius: 12px;
+            padding: 7px 16px;
             color: #888;
             font-variant-numeric: tabular-nums;
             word-break: break-all;
             text-align: center;
             max-width: 100%;
+            line-height: 1.5;
         }
 
-        /* Download + Reset row */
+        /* Reset/CSS row */
         .action-row {
             display: flex;
-            gap: 10px;
-            margin-top: 22px;
+            gap: 12px;
+            margin-top: 28px;
             width: 100%;
             justify-content: center;
+        }
+
+        @media (max-width: 640px) {
+            .action-row {
+                flex-direction: row;
+                margin-top: 0;
+                width: auto;
+                gap: 8px;
+            }
         }
 
         .btn {
@@ -151,26 +325,114 @@
             border: none;
             border-radius: 12px;
             font-family: 'Outfit', sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             cursor: pointer;
             transition: transform 0.12s, filter 0.12s;
-            max-width: 140px;
+            min-width: 90px;
+            max-width: 130px;
         }
-        .btn:hover { transform: scale(1.03); filter: brightness(1.08); }
-        .btn:active { transform: scale(0.98); }
+
+        .btn:hover {
+            transform: scale(1.03);
+            filter: brightness(1.08);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 640px) {
+            .btn {
+                padding: 9px 14px;
+                min-width: unset;
+                max-width: unset;
+                flex: unset;
+                font-size: 11px;
+                border-radius: 10px;
+            }
+        }
 
         #resetBtn {
             background: var(--accent);
             color: #fff;
         }
+
         #copyFilterBtn {
             background: var(--panel-bg);
             color: #555;
             border: 1px solid var(--border);
         }
+
+        #downloadBtn {
+            background: #16a34a;
+            color: #fff;
+        }
+
+        /* ── Tab Buttons ── */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px 0;
+            border: none;
+            background: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #aaa;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .tab-btn:hover:not(.active) { color: #666; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: flex; flex-direction: column; gap: 22px; }
+        @media (max-width: 640px) {
+            .tab-panel.active { gap: 18px; }
+        }
+
+        /* Scale slider track */
+        #scaleSlider { background: linear-gradient(to right, #ccc, #1a6adb); }
+
+        /* Background controls */
+        #bgHueSlider {
+            background: linear-gradient(to right,
+                #ff0000,#ff8000,#ffff00,#00ff00,
+                #00ffff,#0000ff,#ff00ff,#ff0000);
+        }
+        #bgSatSlider { background: linear-gradient(to right, #aaa, #1a6adb); }
+        #bgLitSlider { background: linear-gradient(to right, #000, #fff); }
+
+        .bg-swatches {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+        .bg-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.12s, border-color 0.12s;
+        }
+        .bg-swatch:hover { transform: scale(1.12); }
+        .bg-swatch.active { border-color: #222; transform: scale(1.12); }
 
         /* ═══════════════════════════════════════
            CONTROLS CARD
@@ -178,8 +440,18 @@
         .controls-card {
             background: var(--card-bg);
             border-radius: 24px;
-            box-shadow: 0 20px 56px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 56px rgba(0, 0, 0, 0.08);
             overflow: hidden;
+        }
+
+        @media (max-width: 640px) {
+            .controls-card {
+                border-radius: 28px 28px 0 0;
+                background: #fff;
+                box-shadow: 0 -4px 32px rgba(0,0,0,0.18);
+                /* stretch full width */
+                margin: 0;
+            }
         }
 
         .panel-header {
@@ -192,6 +464,29 @@
             text-transform: uppercase;
         }
 
+        @media (max-width: 640px) {
+            .panel-header {
+                /* Dark navy matches the top gradient */
+                background: linear-gradient(135deg, #0f1b35 0%, #1c3265 100%);
+                padding: 20px 22px 18px;
+                font-size: 12px;
+                letter-spacing: 2.5px;
+                /* Drag handle visual */
+                position: relative;
+            }
+            .panel-header::before {
+                content: '';
+                position: absolute;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 36px;
+                height: 3px;
+                border-radius: 99px;
+                background: rgba(255,255,255,0.3);
+            }
+        }
+
         .panel-body {
             padding: 24px 24px 28px;
             display: flex;
@@ -200,7 +495,10 @@
         }
 
         @media (max-width: 640px) {
-            .panel-body { padding: 18px 18px 22px; }
+            .panel-body {
+                padding: 20px 18px 32px;
+                gap: 18px;
+            }
         }
 
         /* Section title */
@@ -223,7 +521,9 @@
         }
 
         @media (max-width: 380px) {
-            .presets-grid { grid-template-columns: repeat(5, 1fr); }
+            .presets-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         .preset-swatch {
@@ -235,8 +535,16 @@
             transition: transform 0.12s, border-color 0.12s;
             position: relative;
         }
-        .preset-swatch:hover { transform: scale(1.1); }
-        .preset-swatch.active { border-color: #333; transform: scale(1.1); }
+
+        .preset-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .preset-swatch.active {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
         .preset-swatch .swatch-label {
             position: absolute;
             bottom: -18px;
@@ -311,32 +619,54 @@
             border-radius: 50%;
             background: #fff;
             border: 3px solid var(--accent);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
             transition: border-color 0.15s;
         }
+
         input[type=range]::-moz-range-thumb {
             width: 24px;
             height: 24px;
             border-radius: 50%;
             background: #fff;
             border: 3px solid var(--accent);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
             transition: border-color 0.15s;
         }
 
         /* Track colours per slider */
         #hueSlider {
             background: linear-gradient(to right,
-                #ff0000, #ff8000, #ffff00, #00ff00,
-                #00ffff, #0000ff, #ff00ff, #ff0000);
+                    #ff0000, #ff8000, #ffff00, #00ff00,
+                    #00ffff, #0000ff, #ff00ff, #ff0000);
         }
-        #satSlider   { background: linear-gradient(to right, #888, #1a6adb); }
-        #briSlider   { background: linear-gradient(to right, #111, #fff); }
-        #conSlider   { background: linear-gradient(to right, #888, #000); }
-        #sepSlider   { background: linear-gradient(to right, #ccc, #b5860d); }
-        #invSlider   { background: linear-gradient(to right, #1a6adb, #e44); }
-        #blurSlider  { background: linear-gradient(to right, #cce, #6699ff); }
-        #dropSlider  { background: linear-gradient(to right, #eee, #222); }
+
+        #satSlider {
+            background: linear-gradient(to right, #888, #1a6adb);
+        }
+
+        #briSlider {
+            background: linear-gradient(to right, #111, #fff);
+        }
+
+        #conSlider {
+            background: linear-gradient(to right, #888, #000);
+        }
+
+        #sepSlider {
+            background: linear-gradient(to right, #ccc, #b5860d);
+        }
+
+        #invSlider {
+            background: linear-gradient(to right, #1a6adb, #e44);
+        }
+
+        #blurSlider {
+            background: linear-gradient(to right, #cce, #6699ff);
+        }
+
+        #dropSlider {
+            background: linear-gradient(to right, #eee, #222);
+        }
 
         /* Toggle switches */
         .toggle-row {
@@ -346,7 +676,10 @@
             padding: 8px 0;
             border-bottom: 1px solid var(--border);
         }
-        .toggle-row:last-child { border-bottom: none; }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
 
         .toggle-label {
             display: flex;
@@ -362,7 +695,13 @@
             width: 44px;
             height: 24px;
         }
-        .toggle input { opacity: 0; width: 0; height: 0; }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
         .toggle-track {
             position: absolute;
             inset: 0;
@@ -371,6 +710,7 @@
             cursor: pointer;
             transition: background 0.2s;
         }
+
         .toggle-track::after {
             content: '';
             position: absolute;
@@ -381,10 +721,16 @@
             top: 3px;
             left: 3px;
             transition: transform 0.2s;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
-        .toggle input:checked + .toggle-track { background: var(--accent); }
-        .toggle input:checked + .toggle-track::after { transform: translateX(20px); }
+
+        .toggle input:checked+.toggle-track {
+            background: var(--accent);
+        }
+
+        .toggle input:checked+.toggle-track::after {
+            transform: translateX(20px);
+        }
 
         /* ── Copy toast ── */
         .toast {
@@ -403,334 +749,492 @@
             pointer-events: none;
             z-index: 9999;
         }
+
         .toast.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
     </style>
 </head>
+
 <body>
 
-<div class="page">
+    <div class="page">
 
-    <!-- ══════════════════ LOGO PREVIEW CARD ══════════════════ -->
-    <div class="logo-card">
+        <!-- ══════════════════ LOGO PREVIEW CARD ══════════════════ -->
+        <div class="logo-card">
 
-        <div class="logo-preview-wrap">
-            <img id="logoImg" src="image.png" alt="Tarvino Logo">
+            <div class="logo-preview-wrap">
+                <img id="logoImg" src="image.png" alt="Tarvino Logo">
+            </div>
+
+            <!-- Shown only on mobile, in white over dark bg -->
+            <div class="mobile-logo-label">
+                <span class="m-name">Tarvino</span>
+                <span class="m-tag">Private Limited</span>
+            </div>
+
+            <!-- Desktop elements (hidden on mobile) -->
+            <h1 class="brand-name" id="brandName">Tarvino</h1>
+            <div class="brand-tagline">Private Limited</div>
+            <div class="filter-badge" id="filterBadge">filter: none</div>
+
+            <div class="action-row">
+                <button class="btn" id="resetBtn">↺ Reset</button>
+                <button class="btn" id="copyFilterBtn">⧉ CSS</button>
+            </div>
+
         </div>
 
-        <h1 class="brand-name" id="brandName">Tarvino</h1>
-        <div class="brand-tagline">Private Limited</div>
+        <!-- ══════════════════ CONTROLS CARD ══════════════════ -->
+        <div class="controls-card">
 
-        <div class="filter-badge" id="filterBadge">filter: none</div>
+            <div class="panel-header">🎨 Color Grading Studio</div>
 
-        <div class="action-row">
-            <button class="btn" id="resetBtn">↺ Reset</button>
-            <button class="btn" id="copyFilterBtn">⧉ Copy CSS</button>
-        </div>
+            <!-- Tab buttons -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tabLogo">✏️ Edit Logo</button>
+                <button class="tab-btn" id="tabBg">🖼 Background</button>
+            </div>
 
-    </div>
+            <div class="panel-body">
 
-    <!-- ══════════════════ CONTROLS CARD ══════════════════ -->
-    <div class="controls-card">
+                <!-- ═══ LOGO TAB ═══ -->
+                <div class="tab-panel active" id="panelLogo">
 
-        <div class="panel-header">🎨 Color Grading Studio</div>
+                <!-- SCALE -->
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">⤡</span> Scale</span>
+                        <span class="slider-value" id="scaleDisplay">100%</span>
+                    </div>
+                    <input type="range" id="scaleSlider" min="20" max="200" value="100">
+                </div>
 
-        <div class="panel-body">
-
-            <!-- QUICK PRESETS -->
-            <div>
-                <div class="section-title">Quick Color Presets</div>
-                <div class="presets-wrap">
-                    <div class="presets-grid" id="presetsGrid">
-                        <!-- Injected by JS -->
+                <!-- QUICK PRESETS -->
+                <div>
+                    <div class="section-title">Quick Color Presets</div>
+                    <div class="presets-wrap">
+                        <div class="presets-grid" id="presetsGrid">
+                            <!-- Injected by JS -->
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- HUE ROTATE -->
-            <div class="section-title" style="margin-bottom:0">Fine Controls</div>
+                <!-- HUE ROTATE -->
+                <div class="section-title" style="margin-bottom:0">Fine Controls</div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">🌈</span> Hue Rotate</span>
-                    <span class="slider-value" id="hueDisplay">0°</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">🌈</span> Hue Rotate</span>
+                        <span class="slider-value" id="hueDisplay">0°</span>
+                    </div>
+                    <input type="range" id="hueSlider" min="0" max="360" value="0">
                 </div>
-                <input type="range" id="hueSlider" min="0" max="360" value="0">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">💧</span> Saturation</span>
-                    <span class="slider-value" id="satDisplay">100%</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">💧</span> Saturation</span>
+                        <span class="slider-value" id="satDisplay">100%</span>
+                    </div>
+                    <input type="range" id="satSlider" min="0" max="300" value="100">
                 </div>
-                <input type="range" id="satSlider" min="0" max="300" value="100">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">☀️</span> Brightness</span>
-                    <span class="slider-value" id="briDisplay">100%</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">☀️</span> Brightness</span>
+                        <span class="slider-value" id="briDisplay">100%</span>
+                    </div>
+                    <input type="range" id="briSlider" min="10" max="250" value="100">
                 </div>
-                <input type="range" id="briSlider" min="10" max="250" value="100">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">◑</span> Contrast</span>
-                    <span class="slider-value" id="conDisplay">100%</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">◑</span> Contrast</span>
+                        <span class="slider-value" id="conDisplay">100%</span>
+                    </div>
+                    <input type="range" id="conSlider" min="0" max="300" value="100">
                 </div>
-                <input type="range" id="conSlider" min="0" max="300" value="100">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">🟫</span> Sepia</span>
-                    <span class="slider-value" id="sepDisplay">0%</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">🟫</span> Sepia</span>
+                        <span class="slider-value" id="sepDisplay">0%</span>
+                    </div>
+                    <input type="range" id="sepSlider" min="0" max="100" value="0">
                 </div>
-                <input type="range" id="sepSlider" min="0" max="100" value="0">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">🔃</span> Invert</span>
-                    <span class="slider-value" id="invDisplay">0%</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">🔃</span> Invert</span>
+                        <span class="slider-value" id="invDisplay">0%</span>
+                    </div>
+                    <input type="range" id="invSlider" min="0" max="100" value="0">
                 </div>
-                <input type="range" id="invSlider" min="0" max="100" value="0">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">🌫️</span> Blur</span>
-                    <span class="slider-value" id="blurDisplay">0px</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">🌫️</span> Blur</span>
+                        <span class="slider-value" id="blurDisplay">0px</span>
+                    </div>
+                    <input type="range" id="blurSlider" min="0" max="20" value="0" step="0.5">
                 </div>
-                <input type="range" id="blurSlider" min="0" max="20" value="0" step="0.5">
-            </div>
 
-            <div class="control-group">
-                <div class="slider-row">
-                    <span class="slider-label"><span class="slider-icon">🌑</span> Drop Shadow</span>
-                    <span class="slider-value" id="dropDisplay">0px</span>
+                <div class="control-group">
+                    <div class="slider-row">
+                        <span class="slider-label"><span class="slider-icon">🌑</span> Drop Shadow</span>
+                        <span class="slider-value" id="dropDisplay">0px</span>
+                    </div>
+                    <input type="range" id="dropSlider" min="0" max="40" value="0">
                 </div>
-                <input type="range" id="dropSlider" min="0" max="40" value="0">
-            </div>
 
-            <!-- TOGGLE EFFECTS -->
-            <div>
-                <div class="section-title">Special Effects</div>
-                <div class="toggle-row">
-                    <span class="toggle-label"><span>🔳</span> Greyscale</span>
-                    <label class="toggle">
-                        <input type="checkbox" id="greyToggle">
-                        <span class="toggle-track"></span>
-                    </label>
+                <!-- TOGGLE EFFECTS -->
+                <div>
+                    <div class="section-title">Special Effects</div>
+                    <div class="toggle-row">
+                        <span class="toggle-label"><span>🔳</span> Greyscale</span>
+                        <label class="toggle">
+                            <input type="checkbox" id="greyToggle">
+                            <span class="toggle-track"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <span class="toggle-label"><span>✨</span> Opacity 50%</span>
+                        <label class="toggle">
+                            <input type="checkbox" id="opacityToggle">
+                            <span class="toggle-track"></span>
+                        </label>
+                    </div>
                 </div>
-                <div class="toggle-row">
-                    <span class="toggle-label"><span>✨</span> Opacity 50%</span>
-                    <label class="toggle">
-                        <input type="checkbox" id="opacityToggle">
-                        <span class="toggle-track"></span>
-                    </label>
-                </div>
-            </div>
 
+                </div><!-- /panelLogo -->
+
+                <!-- ═══ BACKGROUND TAB ═══ -->
+                <div class="tab-panel" id="panelBg">
+
+                    <div class="section-title">Background Presets</div>
+                    <div class="bg-swatches" id="bgSwatches"></div>
+
+                    <div class="section-title" style="margin-bottom:0">Fine Tune</div>
+
+                    <div class="control-group">
+                        <div class="slider-row">
+                            <span class="slider-label"><span class="slider-icon">🌈</span> Hue</span>
+                            <span class="slider-value" id="bgHueDisplay">0°</span>
+                        </div>
+                        <input type="range" id="bgHueSlider" min="0" max="360" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="slider-row">
+                            <span class="slider-label"><span class="slider-icon">💧</span> Saturation</span>
+                            <span class="slider-value" id="bgSatDisplay">0%</span>
+                        </div>
+                        <input type="range" id="bgSatSlider" min="0" max="100" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="slider-row">
+                            <span class="slider-label"><span class="slider-icon">☀️</span> Lightness</span>
+                            <span class="slider-value" id="bgLitDisplay">96%</span>
+                        </div>
+                        <input type="range" id="bgLitSlider" min="0" max="100" value="96">
+                    </div>
+
+                </div><!-- /panelBg -->
+
+            </div>
         </div>
+
     </div>
 
-</div>
+    <!-- Toast notification -->
+    <div class="toast" id="toast">✓ CSS filter copied!</div>
 
-<!-- Toast notification -->
-<div class="toast" id="toast">✓ CSS filter copied!</div>
+    <script>
+        /* ══════════════════════════════════════
+           Elements
+        ══════════════════════════════════════ */
+        const logoImg = document.getElementById('logoImg');
+        const brandName = document.getElementById('brandName');
+        const filterBadge = document.getElementById('filterBadge');
+        const resetBtn = document.getElementById('resetBtn');
+        const copyFilterBtn = document.getElementById('copyFilterBtn');
+        const toast = document.getElementById('toast');
 
-<script>
-    /* ══════════════════════════════════════
-       Elements
-    ══════════════════════════════════════ */
-    const logoImg       = document.getElementById('logoImg');
-    const brandName     = document.getElementById('brandName');
-    const filterBadge   = document.getElementById('filterBadge');
-    const resetBtn      = document.getElementById('resetBtn');
-    const copyFilterBtn = document.getElementById('copyFilterBtn');
-    const toast         = document.getElementById('toast');
+        const hueSlider = document.getElementById('hueSlider');
+        const satSlider = document.getElementById('satSlider');
+        const briSlider = document.getElementById('briSlider');
+        const conSlider = document.getElementById('conSlider');
+        const sepSlider = document.getElementById('sepSlider');
+        const invSlider = document.getElementById('invSlider');
+        const blurSlider = document.getElementById('blurSlider');
+        const dropSlider = document.getElementById('dropSlider');
 
-    const hueSlider  = document.getElementById('hueSlider');
-    const satSlider  = document.getElementById('satSlider');
-    const briSlider  = document.getElementById('briSlider');
-    const conSlider  = document.getElementById('conSlider');
-    const sepSlider  = document.getElementById('sepSlider');
-    const invSlider  = document.getElementById('invSlider');
-    const blurSlider = document.getElementById('blurSlider');
-    const dropSlider = document.getElementById('dropSlider');
+        const hueDisplay = document.getElementById('hueDisplay');
+        const satDisplay = document.getElementById('satDisplay');
+        const briDisplay = document.getElementById('briDisplay');
+        const conDisplay = document.getElementById('conDisplay');
+        const sepDisplay = document.getElementById('sepDisplay');
+        const invDisplay = document.getElementById('invDisplay');
+        const blurDisplay = document.getElementById('blurDisplay');
+        const dropDisplay = document.getElementById('dropDisplay');
 
-    const hueDisplay  = document.getElementById('hueDisplay');
-    const satDisplay  = document.getElementById('satDisplay');
-    const briDisplay  = document.getElementById('briDisplay');
-    const conDisplay  = document.getElementById('conDisplay');
-    const sepDisplay  = document.getElementById('sepDisplay');
-    const invDisplay  = document.getElementById('invDisplay');
-    const blurDisplay = document.getElementById('blurDisplay');
-    const dropDisplay = document.getElementById('dropDisplay');
+        const greyToggle = document.getElementById('greyToggle');
+        const opacityToggle = document.getElementById('opacityToggle');
 
-    const greyToggle    = document.getElementById('greyToggle');
-    const opacityToggle = document.getElementById('opacityToggle');
+        /* Dynamic style for thumb border */
+        const thumbStyle = document.createElement('style');
+        document.head.appendChild(thumbStyle);
 
-    /* Dynamic style for thumb border */
-    const thumbStyle = document.createElement('style');
-    document.head.appendChild(thumbStyle);
-
-    /* ══════════════════════════════════════
-       Quick Presets
-    ══════════════════════════════════════ */
-    const PRESETS = [
-        { label: 'Original', hue:0,   sat:100, bri:100, con:100, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Crimson',  hue:160, sat:150, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Emerald',  hue:110, sat:130, bri:105, con:105, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Violet',   hue:200, sat:140, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Gold',     hue:330, sat:120, bri:110, con:105, sep:30, inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Rose',     hue:140, sat:140, bri:105, con:100, sep:20, inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Ocean',    hue:20,  sat:130, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Sunset',   hue:320, sat:160, bri:110, con:120, sep:10, inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Arctic',   hue:50,  sat:70,  bri:115, con:90,  sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'Neon',     hue:90,  sat:300, bri:130, con:130, sep:0,  inv:0,  blur:0, drop:0, grey:false },
-        { label: 'B&W',      hue:0,   sat:0,   bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:true  },
-        { label: 'Invert',   hue:0,   sat:100, bri:100, con:100, sep:0,  inv:100,blur:0, drop:0, grey:false },
-    ];
-
-    /* Compute a representative swatch color for each preset */
-    function presetSwatchColor(p) {
-        if (p.grey) return '#888';
-        if (p.inv === 100) return '#333';
-        const baseHue = (210 + p.hue) % 360;
-        return `hsl(${baseHue}, ${Math.min(p.sat, 100)}%, 50%)`;
-    }
-
-    const presetsGrid = document.getElementById('presetsGrid');
-
-    PRESETS.forEach((p, i) => {
-        const el = document.createElement('div');
-        el.className = 'preset-swatch';
-        el.style.background = presetSwatchColor(p);
-        el.title = p.label;
-        el.innerHTML = `<span class="swatch-label">${p.label}</span>`;
-        el.addEventListener('click', () => applyPreset(p, el));
-        presetsGrid.appendChild(el);
-        if (i === 0) el.classList.add('active');
-    });
-
-    function applyPreset(p, el) {
-        hueSlider.value  = p.hue;
-        satSlider.value  = p.sat;
-        briSlider.value  = p.bri;
-        conSlider.value  = p.con;
-        sepSlider.value  = p.sep;
-        invSlider.value  = p.inv;
-        blurSlider.value = p.blur;
-        dropSlider.value = p.drop;
-        greyToggle.checked    = p.grey;
-        opacityToggle.checked = false;
-
-        document.querySelectorAll('.preset-swatch').forEach(s => s.classList.remove('active'));
-        el.classList.add('active');
-
-        updateFilter();
-    }
-
-    /* ══════════════════════════════════════
-       Core: Build & Apply Filter
-    ══════════════════════════════════════ */
-    function updateFilter() {
-        const hue  = +hueSlider.value;
-        const sat  = +satSlider.value;
-        const bri  = +briSlider.value;
-        const con  = +conSlider.value;
-        const sep  = +sepSlider.value;
-        const inv  = +invSlider.value;
-        const blur = +blurSlider.value;
-        const drop = +dropSlider.value;
-        const grey = greyToggle.checked;
-        const opa  = opacityToggle.checked;
-
-        /* Display values */
-        hueDisplay.textContent  = hue  + '°';
-        satDisplay.textContent  = sat  + '%';
-        briDisplay.textContent  = bri  + '%';
-        conDisplay.textContent  = con  + '%';
-        sepDisplay.textContent  = sep  + '%';
-        invDisplay.textContent  = inv  + '%';
-        blurDisplay.textContent = blur + 'px';
-        dropDisplay.textContent = drop + 'px';
-
-        /* Build filter string */
-        const parts = [
-            `hue-rotate(${hue}deg)`,
-            `saturate(${sat}%)`,
-            `brightness(${bri}%)`,
-            `contrast(${con}%)`,
+        /* ══════════════════════════════════════
+           Quick Presets
+        ══════════════════════════════════════ */
+        const PRESETS = [
+            { label: 'Original', hue: 0, sat: 100, bri: 100, con: 100, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Crimson', hue: 160, sat: 150, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Emerald', hue: 110, sat: 130, bri: 105, con: 105, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Violet', hue: 200, sat: 140, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Gold', hue: 330, sat: 120, bri: 110, con: 105, sep: 30, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Rose', hue: 140, sat: 140, bri: 105, con: 100, sep: 20, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Ocean', hue: 20, sat: 130, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Sunset', hue: 320, sat: 160, bri: 110, con: 120, sep: 10, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Arctic', hue: 50, sat: 70, bri: 115, con: 90, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Neon', hue: 90, sat: 300, bri: 130, con: 130, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'B&W', hue: 0, sat: 0, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: true },
+            { label: 'Invert', hue: 0, sat: 100, bri: 100, con: 100, sep: 0, inv: 100, blur: 0, drop: 0, grey: false },
         ];
-        if (sep  > 0) parts.push(`sepia(${sep}%)`);
-        if (inv  > 0) parts.push(`invert(${inv}%)`);
-        if (blur > 0) parts.push(`blur(${blur}px)`);
-        if (drop > 0) parts.push(`drop-shadow(0 ${drop/2}px ${drop}px rgba(0,0,0,0.45))`);
-        if (grey)     parts.push(`grayscale(100%)`);
 
-        const filterStr = parts.join(' ');
+        /* Compute a representative swatch color for each preset */
+        function presetSwatchColor(p) {
+            if (p.grey) return '#888';
+            if (p.inv === 100) return '#333';
+            const baseHue = (210 + p.hue) % 360;
+            return `hsl(${baseHue}, ${Math.min(p.sat, 100)}%, 50%)`;
+        }
 
-        logoImg.style.filter  = filterStr;
-        logoImg.style.opacity = opa ? '0.5' : '1';
+        const presetsGrid = document.getElementById('presetsGrid');
 
-        filterBadge.textContent = 'filter: ' + filterStr;
+        PRESETS.forEach((p, i) => {
+            const el = document.createElement('div');
+            el.className = 'preset-swatch';
+            el.style.background = presetSwatchColor(p);
+            el.title = p.label;
+            el.innerHTML = `<span class="swatch-label">${p.label}</span>`;
+            el.addEventListener('click', () => applyPreset(p, el));
+            presetsGrid.appendChild(el);
+            if (i === 0) el.classList.add('active');
+        });
 
-        /* Update UI accent to match logo hue */
-        const uiHue = (210 + hue) % 360;
-        const accent = `hsl(${uiHue}, 80%, 40%)`;
+        function applyPreset(p, el) {
+            hueSlider.value = p.hue;
+            satSlider.value = p.sat;
+            briSlider.value = p.bri;
+            conSlider.value = p.con;
+            sepSlider.value = p.sep;
+            invSlider.value = p.inv;
+            blurSlider.value = p.blur;
+            dropSlider.value = p.drop;
+            greyToggle.checked = p.grey;
+            opacityToggle.checked = false;
 
-        brandName.style.color      = `hsl(${uiHue}, 80%, 16%)`;
-        resetBtn.style.background  = accent;
-        document.documentElement.style.setProperty('--accent', accent);
+            document.querySelectorAll('.preset-swatch').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
 
-        thumbStyle.textContent = `
+            updateFilter();
+        }
+
+        /* ══════════════════════════════════════
+           Core: Build & Apply Filter
+        ══════════════════════════════════════ */
+        function updateFilter() {
+            const hue = +hueSlider.value;
+            const sat = +satSlider.value;
+            const bri = +briSlider.value;
+            const con = +conSlider.value;
+            const sep = +sepSlider.value;
+            const inv = +invSlider.value;
+            const blur = +blurSlider.value;
+            const drop = +dropSlider.value;
+            const grey = greyToggle.checked;
+            const opa = opacityToggle.checked;
+
+            /* Display values */
+            hueDisplay.textContent = hue + '°';
+            satDisplay.textContent = sat + '%';
+            briDisplay.textContent = bri + '%';
+            conDisplay.textContent = con + '%';
+            sepDisplay.textContent = sep + '%';
+            invDisplay.textContent = inv + '%';
+            blurDisplay.textContent = blur + 'px';
+            dropDisplay.textContent = drop + 'px';
+
+            /* Build filter string */
+            const parts = [
+                `hue-rotate(${hue}deg)`,
+                `saturate(${sat}%)`,
+                `brightness(${bri}%)`,
+                `contrast(${con}%)`,
+            ];
+            if (sep > 0) parts.push(`sepia(${sep}%)`);
+            if (inv > 0) parts.push(`invert(${inv}%)`);
+            if (blur > 0) parts.push(`blur(${blur}px)`);
+            if (drop > 0) parts.push(`drop-shadow(0 ${drop / 2}px ${drop}px rgba(0,0,0,0.45))`);
+            if (grey) parts.push(`grayscale(100%)`);
+
+            const filterStr = parts.join(' ');
+
+            logoImg.style.filter = filterStr;
+            logoImg.style.opacity = opa ? '0.5' : '1';
+
+            filterBadge.textContent = 'filter: ' + filterStr;
+
+            /* Update UI accent to match logo hue */
+            const uiHue = (210 + hue) % 360;
+            const accent = `hsl(${uiHue}, 80%, 40%)`;
+
+            brandName.style.color = `hsl(${uiHue}, 80%, 16%)`;
+            resetBtn.style.background = accent;
+            document.documentElement.style.setProperty('--accent', accent);
+
+            thumbStyle.textContent = `
             input[type=range]::-webkit-slider-thumb { border-color: ${accent}; }
             input[type=range]::-moz-range-thumb     { border-color: ${accent}; }
         `;
-    }
+        }
 
-    /* ══════════════════════════════════════
-       Event listeners
-    ══════════════════════════════════════ */
-    [hueSlider, satSlider, briSlider, conSlider,
-     sepSlider, invSlider, blurSlider, dropSlider].forEach(s => {
-        s.addEventListener('input', () => {
-            // Deselect preset swatches when manually adjusted
-            document.querySelectorAll('.preset-swatch').forEach(el => el.classList.remove('active'));
-            updateFilter();
+        /* ══════════════════════════════════════
+           Event listeners
+        ══════════════════════════════════════ */
+        [hueSlider, satSlider, briSlider, conSlider,
+            sepSlider, invSlider, blurSlider, dropSlider].forEach(s => {
+                s.addEventListener('input', () => {
+                    // Deselect preset swatches when manually adjusted
+                    document.querySelectorAll('.preset-swatch').forEach(el => el.classList.remove('active'));
+                    updateFilter();
+                });
+            });
+
+        [greyToggle, opacityToggle].forEach(t => {
+            t.addEventListener('change', updateFilter);
         });
-    });
 
-    [greyToggle, opacityToggle].forEach(t => {
-        t.addEventListener('change', updateFilter);
-    });
-
-    resetBtn.addEventListener('click', () => {
-        applyPreset(PRESETS[0], presetsGrid.children[0]);
-    });
-
-    copyFilterBtn.addEventListener('click', () => {
-        const txt = filterBadge.textContent;
-        navigator.clipboard.writeText(txt).then(() => showToast('✓ CSS filter copied!')).catch(() => {
-            showToast('⚠ Copy failed — try manually');
+        resetBtn.addEventListener('click', () => {
+            applyPreset(PRESETS[0], presetsGrid.children[0]);
         });
-    });
 
-    function showToast(msg) {
-        toast.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-    }
+        copyFilterBtn.addEventListener('click', () => {
+            const txt = filterBadge.textContent;
+            navigator.clipboard.writeText(txt).then(() => showToast('✓ CSS filter copied!')).catch(() => {
+                showToast('⚠ Copy failed — try manually');
+            });
+        });
 
-    /* Init */
-    updateFilter();
-</script>
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        /* ══════════════════════════════════════
+           TAB SWITCHING
+        ══════════════════════════════════════ */
+        const tabLogo   = document.getElementById('tabLogo');
+        const tabBg     = document.getElementById('tabBg');
+        const panelLogo = document.getElementById('panelLogo');
+        const panelBg   = document.getElementById('panelBg');
+
+        tabLogo.addEventListener('click', () => {
+            tabLogo.classList.add('active'); tabBg.classList.remove('active');
+            panelLogo.classList.add('active'); panelBg.classList.remove('active');
+        });
+        tabBg.addEventListener('click', () => {
+            tabBg.classList.add('active'); tabLogo.classList.remove('active');
+            panelBg.classList.add('active'); panelLogo.classList.remove('active');
+        });
+
+        /* ══════════════════════════════════════
+           SCALE SLIDER
+        ══════════════════════════════════════ */
+        const scaleSlider  = document.getElementById('scaleSlider');
+        const scaleDisplay = document.getElementById('scaleDisplay');
+        const logoPreview  = document.querySelector('.logo-preview-wrap');
+
+        scaleSlider.addEventListener('input', () => {
+            const s = scaleSlider.value;
+            scaleDisplay.textContent = s + '%';
+            logoImg.style.transform = `scale(${s / 100})`;
+        });
+
+        /* ══════════════════════════════════════
+           BACKGROUND COLOR CONTROLS
+        ══════════════════════════════════════ */
+        const bgHueSlider  = document.getElementById('bgHueSlider');
+        const bgSatSlider  = document.getElementById('bgSatSlider');
+        const bgLitSlider  = document.getElementById('bgLitSlider');
+        const bgHueDisplay = document.getElementById('bgHueDisplay');
+        const bgSatDisplay = document.getElementById('bgSatDisplay');
+        const bgLitDisplay = document.getElementById('bgLitDisplay');
+
+        const BG_PRESETS = [
+            { label: 'White',    h:0,   s:0,  l:100 },
+            { label: 'Cream',    h:40,  s:40, l:96  },
+            { label: 'Silver',   h:220, s:10, l:88  },
+            { label: 'Slate',    h:220, s:20, l:40  },
+            { label: 'Navy',     h:225, s:60, l:20  },
+            { label: 'Black',    h:0,   s:0,  l:5   },
+            { label: 'Sky',      h:200, s:80, l:75  },
+            { label: 'Mint',     h:160, s:60, l:80  },
+            { label: 'Rose',     h:350, s:70, l:85  },
+            { label: 'Gold',     h:45,  s:90, l:55  },
+            { label: 'Violet',   h:270, s:60, l:70  },
+            { label: 'Coral',    h:15,  s:85, l:70  },
+            { label: 'Forest',   h:140, s:50, l:30  },
+            { label: 'Dusk',     h:260, s:30, l:20  },
+            { label: 'Lemon',    h:55,  s:100,l:80  },
+            { label: 'Graphite', h:210, s:12, l:28  },
+        ];
+
+        function applyBg() {
+            const h = +bgHueSlider.value;
+            const s = +bgSatSlider.value;
+            const l = +bgLitSlider.value;
+            bgHueDisplay.textContent = h + '°';
+            bgSatDisplay.textContent = s + '%';
+            bgLitDisplay.textContent = l + '%';
+            logoPreview.style.background = `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        const bgSwatches = document.getElementById('bgSwatches');
+        BG_PRESETS.forEach((p, i) => {
+            const el = document.createElement('div');
+            el.className = 'bg-swatch' + (i === 0 ? ' active' : '');
+            el.style.background = `hsl(${p.h}, ${p.s}%, ${p.l}%)`;
+            el.title = p.label;
+            el.style.border = p.l > 90 ? '2px solid #ddd' : '2px solid transparent';
+            el.addEventListener('click', () => {
+                bgHueSlider.value = p.h;
+                bgSatSlider.value = p.s;
+                bgLitSlider.value = p.l;
+                document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('active'));
+                el.classList.add('active');
+                applyBg();
+            });
+            bgSwatches.appendChild(el);
+        });
+
+        [bgHueSlider, bgSatSlider, bgLitSlider].forEach(s => {
+            s.addEventListener('input', () => {
+                document.querySelectorAll('.bg-swatch').forEach(sw => sw.classList.remove('active'));
+                applyBg();
+            });
+        });
+
+        /* Init */
+        updateFilter();
+        applyBg();
+    </script>
 
 </body>
+
 </html>
