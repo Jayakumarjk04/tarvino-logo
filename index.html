@@ -829,7 +829,7 @@
                         <span class="slider-label"><span class="slider-icon">🌈</span> Hue Rotate</span>
                         <span class="slider-value" id="hueDisplay">0°</span>
                     </div>
-                    <input type="range" id="hueSlider" min="0" max="360" value="0">
+                    <input type="range" id="hueSlider" min="0" max="360" value="232">
                 </div>
 
                 <div class="control-group">
@@ -991,26 +991,25 @@
            Quick Presets
         ══════════════════════════════════════ */
         const PRESETS = [
-            { label: 'Original', hue: 0, sat: 100, bri: 100, con: 100, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Crimson', hue: 160, sat: 150, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Emerald', hue: 110, sat: 130, bri: 105, con: 105, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Violet', hue: 200, sat: 140, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Gold', hue: 330, sat: 120, bri: 110, con: 105, sep: 30, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Rose', hue: 140, sat: 140, bri: 105, con: 100, sep: 20, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Ocean', hue: 20, sat: 130, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Sunset', hue: 320, sat: 160, bri: 110, con: 120, sep: 10, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Arctic', hue: 50, sat: 70, bri: 115, con: 90, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'Neon', hue: 90, sat: 300, bri: 130, con: 130, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
-            { label: 'B&W', hue: 0, sat: 0, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: true },
-            { label: 'Invert', hue: 0, sat: 100, bri: 100, con: 100, sep: 0, inv: 100, blur: 0, drop: 0, grey: false },
+            { label: 'Original', hue: 232, sat: 100, bri: 100, con: 100, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Crimson', hue: 350, sat: 150, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Emerald', hue: 140, sat: 130, bri: 105, con: 105, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Violet', hue: 270, sat: 140, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Gold', hue: 45, sat: 120, bri: 110, con: 105, sep: 30, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Rose', hue: 330, sat: 140, bri: 105, con: 100, sep: 20, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Ocean', hue: 200, sat: 130, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Sunset', hue: 20, sat: 160, bri: 110, con: 120, sep: 10, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Arctic', hue: 180, sat: 70, bri: 115, con: 90, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'Neon', hue: 300, sat: 300, bri: 130, con: 130, sep: 0, inv: 0, blur: 0, drop: 0, grey: false },
+            { label: 'B&W', hue: 232, sat: 0, bri: 100, con: 110, sep: 0, inv: 0, blur: 0, drop: 0, grey: true },
+            { label: 'Invert', hue: 232, sat: 100, bri: 100, con: 100, sep: 0, inv: 100, blur: 0, drop: 0, grey: false },
         ];
 
         /* Compute a representative swatch color for each preset */
         function presetSwatchColor(p) {
             if (p.grey) return '#888';
             if (p.inv === 100) return '#333';
-            const baseHue = (210 + p.hue) % 360;
-            return `hsl(${baseHue}, ${Math.min(p.sat, 100)}%, 50%)`;
+            return `hsl(${p.hue}, ${Math.min(p.sat, 100)}%, 50%)`;
         }
 
         const presetsGrid = document.getElementById('presetsGrid');
@@ -1070,8 +1069,11 @@
             dropDisplay.textContent = drop + 'px';
 
             /* Build filter string */
+            // Map the absolute slider hue (0-360) back to relative hue-rotate for the image.
+            // Image base hue is approx 232°.
+            const hueRotateVal = hue - 232;
             const parts = [
-                `hue-rotate(${hue}deg)`,
+                `hue-rotate(${hueRotateVal}deg)`,
                 `saturate(${sat}%)`,
                 `brightness(${bri}%)`,
                 `contrast(${con}%)`,
@@ -1090,7 +1092,7 @@
             filterBadge.textContent = 'filter: ' + filterStr;
 
             /* Update UI accent to match logo hue */
-            const uiHue = (210 + hue) % 360;
+            const uiHue = hue;
             const accent = `hsl(${uiHue}, 80%, 40%)`;
 
             brandName.style.color = `hsl(${uiHue}, 80%, 16%)`;
