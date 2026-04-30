@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarvino – Brand Logo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0ece4;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 60px 80px 52px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.09);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── Actual Logo Image ── */
+        .logo-img {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            display: block;
+            /* CSS filter is applied via JS */
+            transition: filter 0.05s linear;
+        }
+
+        /* ── Brand text ── */
+        .brand-name {
+            margin-top: 28px;
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: #0a1a3a;
+            transition: color 0.1s;
+        }
+
+        .brand-tagline {
+            margin-top: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #e5dfd6;
+            margin: 38px 0 28px;
+        }
+
+        /* ── Controls Panel ── */
+        .controls {
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        .slider-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #444;
+            font-variant-numeric: tabular-nums;
+            min-width: 42px;
+            text-align: right;
+        }
+
+        /* ── Rainbow hue track ── */
+        #hueSlider {
+            background: linear-gradient(to right,
+                hsl(0,92%,52%), hsl(30,100%,52%), hsl(60,100%,50%),
+                hsl(120,88%,42%), hsl(190,90%,48%), hsl(240,88%,60%),
+                hsl(280,88%,55%), hsl(320,90%,52%), hsl(360,92%,52%));
+        }
+
+        /* ── Saturation track ── */
+        #satSlider {
+            background: linear-gradient(to right, #aaa, hsl(210, 90%, 50%));
+        }
+
+        /* ── Brightness track ── */
+        #briSlider {
+            background: linear-gradient(to right, #000, #fff);
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 9px;
+            border-radius: 99px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #1a6adb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #1a6adb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+        }
+
+        /* ── Buttons row ── */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        .action-btn {
+            padding: 9px 26px;
+            border: none;
+            border-radius: 99px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.12s, filter 0.12s;
+        }
+        .action-btn:hover { transform: scale(1.04); filter: brightness(1.1); }
+
+        #resetBtn {
+            background: #1a6adb;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <!-- ══════════════════════════════════
+         Actual logo image from Desktop
+    ══════════════════════════════════ -->
+    <img
+        id="logoImg"
+        class="logo-img"
+        src="image.png"
+        alt="Tarvino Logo"
+    >
+
+    <h1 class="brand-name" id="brandName">Tarvino</h1>
+    <div class="brand-tagline">Private Limited</div>
+
+    <div class="divider"></div>
+
+    <div class="controls">
+
+        <!-- HUE -->
+        <div class="control-group">
+            <div class="slider-row">
+                <span class="slider-label">🎨 Color Hue</span>
+                <span class="slider-value" id="hueDisplay">0°</span>
+            </div>
+            <input type="range" id="hueSlider" min="0" max="360" value="0">
+        </div>
+
+        <!-- SATURATION -->
+        <div class="control-group">
+            <div class="slider-row">
+                <span class="slider-label">💧 Saturation</span>
+                <span class="slider-value" id="satDisplay">100%</span>
+            </div>
+            <input type="range" id="satSlider" min="0" max="200" value="100">
+        </div>
+
+        <!-- BRIGHTNESS -->
+        <div class="control-group">
+            <div class="slider-row">
+                <span class="slider-label">☀️ Brightness</span>
+                <span class="slider-value" id="briDisplay">100%</span>
+            </div>
+            <input type="range" id="briSlider" min="20" max="200" value="100">
+        </div>
+
+        <div class="btn-row">
+            <button class="action-btn" id="resetBtn">↺ Reset Original</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const logoImg   = document.getElementById('logoImg');
+    const brandName = document.getElementById('brandName');
+
+    const hueSlider = document.getElementById('hueSlider');
+    const satSlider = document.getElementById('satSlider');
+    const briSlider = document.getElementById('briSlider');
+
+    const hueDisplay = document.getElementById('hueDisplay');
+    const satDisplay = document.getElementById('satDisplay');
+    const briDisplay = document.getElementById('briDisplay');
+
+    const resetBtn  = document.getElementById('resetBtn');
+
+    // Dynamic thumb style element
+    const thumbStyle = document.createElement('style');
+    document.head.appendChild(thumbStyle);
+
+    function updateFilter() {
+        const hue = +hueSlider.value;
+        const sat = +satSlider.value;
+        const bri = +briSlider.value;
+
+        hueDisplay.textContent = hue + '°';
+        satDisplay.textContent = sat + '%';
+        briDisplay.textContent = bri + '%';
+
+        // Apply CSS filter to the actual logo image
+        logoImg.style.filter =
+            `hue-rotate(${hue}deg) saturate(${sat}%) brightness(${bri}%)`;
+
+        // Compute a representative hue for UI accents
+        // Logo is originally blue (hue ~210), so add the rotation
+        const uiHue = (210 + hue) % 360;
+        const accentColor = `hsl(${uiHue}, 80%, 38%)`;
+
+        brandName.style.color = `hsl(${uiHue}, 80%, 16%)`;
+        resetBtn.style.background = accentColor;
+
+        thumbStyle.textContent = `
+            input[type=range]::-webkit-slider-thumb { border-color: ${accentColor}; }
+            input[type=range]::-moz-range-thumb     { border-color: ${accentColor}; }
+        `;
+    }
+
+    hueSlider.addEventListener('input', updateFilter);
+    satSlider.addEventListener('input', updateFilter);
+    briSlider.addEventListener('input', updateFilter);
+
+    resetBtn.addEventListener('click', () => {
+        hueSlider.value = 0;
+        satSlider.value = 100;
+        briSlider.value = 100;
+        updateFilter();
+    });
+
+    // Init
+    updateFilter();
+</script>
+
+</body>
+</html>
