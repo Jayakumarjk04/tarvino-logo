@@ -3,81 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarvino – Brand Logo</title>
+    <title>Tarvino – Logo Color Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ═══════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #1a6adb;
+            --accent-dark: #0d4ba0;
+            --bg: #f0ece4;
+            --card-bg: #ffffff;
+            --text: #0a1a3a;
+            --muted: #aaa;
+            --border: #e8e2d8;
+            --panel-bg: #faf8f5;
+        }
 
         body {
             min-height: 100vh;
+            background: var(--bg);
+            font-family: 'Outfit', sans-serif;
+            color: var(--text);
+            padding: 16px;
+        }
+
+        /* ═══════════════════════════════════════
+           LAYOUT
+        ═══════════════════════════════════════ */
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 640px) {
+            .page { grid-template-columns: 1fr; }
+            body { padding: 12px; }
+        }
+
+        /* ═══════════════════════════════════════
+           LOGO CARD
+        ═══════════════════════════════════════ */
+        .logo-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 48px 32px 40px;
+            box-shadow: 0 20px 56px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky;
+            top: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .logo-card { position: static; padding: 36px 24px 32px; }
+        }
+
+        .logo-preview-wrap {
+            width: 160px;
+            height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f0ece4;
-            font-family: 'Outfit', sans-serif;
+            border-radius: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            margin-bottom: 4px;
         }
 
-        .card {
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 60px 80px 52px;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.09);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        @media (max-width: 640px) {
+            .logo-preview-wrap { width: 130px; height: 130px; }
         }
 
-        /* ── Actual Logo Image ── */
-        .logo-img {
-            width: 160px;
-            height: 160px;
+        #logoImg {
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            display: block;
-            /* CSS filter is applied via JS */
-            transition: filter 0.05s linear;
+            transition: filter 0.04s linear;
         }
 
-        /* ── Brand text ── */
+        @media (max-width: 640px) {
+            #logoImg { width: 100px; height: 100px; }
+        }
+
         .brand-name {
-            margin-top: 28px;
-            font-size: 44px;
+            margin-top: 24px;
+            font-size: 36px;
             font-weight: 800;
-            letter-spacing: 7px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            color: #0a1a3a;
+            color: var(--text);
             transition: color 0.1s;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .brand-name { font-size: 28px; letter-spacing: 4px; }
         }
 
         .brand-tagline {
-            margin-top: 7px;
-            font-size: 13px;
+            margin-top: 6px;
+            font-size: 11px;
             font-weight: 600;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #aaa;
+            color: var(--muted);
         }
 
-        /* ── Divider ── */
-        .divider {
+        /* Filter badge */
+        .filter-badge {
+            margin-top: 18px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 5px 14px;
+            color: #888;
+            font-variant-numeric: tabular-nums;
+            word-break: break-all;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        /* Download + Reset row */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
             width: 100%;
-            height: 1px;
-            background: #e5dfd6;
-            margin: 38px 0 28px;
+            justify-content: center;
         }
 
-        /* ── Controls Panel ── */
-        .controls {
-            width: 340px;
+        .btn {
+            flex: 1;
+            padding: 11px 0;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.12s, filter 0.12s;
+            max-width: 140px;
+        }
+        .btn:hover { transform: scale(1.03); filter: brightness(1.08); }
+        .btn:active { transform: scale(0.98); }
+
+        #resetBtn {
+            background: var(--accent);
+            color: #fff;
+        }
+        #copyFilterBtn {
+            background: var(--panel-bg);
+            color: #555;
+            border: 1px solid var(--border);
+        }
+
+        /* ═══════════════════════════════════════
+           CONTROLS CARD
+        ═══════════════════════════════════════ */
+        .controls-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 20px 56px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--text);
+            color: #fff;
+            padding: 18px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .panel-body {
+            padding: 24px 24px 28px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 22px;
         }
 
+        @media (max-width: 640px) {
+            .panel-body { padding: 18px 18px 22px; }
+        }
+
+        /* Section title */
+        .section-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #bbb;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+        }
+
+        /* ── Color Presets ── */
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 380px) {
+            .presets-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        .preset-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.12s, border-color 0.12s;
+            position: relative;
+        }
+        .preset-swatch:hover { transform: scale(1.1); }
+        .preset-swatch.active { border-color: #333; transform: scale(1.1); }
+        .preset-swatch .swatch-label {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            font-weight: 700;
+            color: #999;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .presets-wrap {
+            padding-bottom: 20px;
+        }
+
+        /* ── Sliders ── */
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 7px;
         }
 
         .slider-row {
@@ -87,44 +268,37 @@
         }
 
         .slider-label {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .slider-icon {
+            font-size: 14px;
+            line-height: 1;
         }
 
         .slider-value {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #444;
             font-variant-numeric: tabular-nums;
-            min-width: 42px;
-            text-align: right;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 8px;
+            min-width: 52px;
+            text-align: center;
         }
 
-        /* ── Rainbow hue track ── */
-        #hueSlider {
-            background: linear-gradient(to right,
-                hsl(0,92%,52%), hsl(30,100%,52%), hsl(60,100%,50%),
-                hsl(120,88%,42%), hsl(190,90%,48%), hsl(240,88%,60%),
-                hsl(280,88%,55%), hsl(320,90%,52%), hsl(360,92%,52%));
-        }
-
-        /* ── Saturation track ── */
-        #satSlider {
-            background: linear-gradient(to right, #aaa, hsl(210, 90%, 50%));
-        }
-
-        /* ── Brightness track ── */
-        #briSlider {
-            background: linear-gradient(to right, #000, #fff);
-        }
-
+        /* ── Slider Tracks ── */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
-            height: 9px;
+            height: 10px;
             border-radius: 99px;
             outline: none;
             cursor: pointer;
@@ -132,162 +306,429 @@
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #fff;
-            border: 3px solid #1a6adb;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+            border: 3px solid var(--accent);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            transition: border-color 0.15s;
         }
         input[type=range]::-moz-range-thumb {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #fff;
-            border: 3px solid #1a6adb;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+            border: 3px solid var(--accent);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            transition: border-color 0.15s;
         }
 
-        /* ── Buttons row ── */
-        .btn-row {
+        /* Track colours per slider */
+        #hueSlider {
+            background: linear-gradient(to right,
+                #ff0000, #ff8000, #ffff00, #00ff00,
+                #00ffff, #0000ff, #ff00ff, #ff0000);
+        }
+        #satSlider   { background: linear-gradient(to right, #888, #1a6adb); }
+        #briSlider   { background: linear-gradient(to right, #111, #fff); }
+        #conSlider   { background: linear-gradient(to right, #888, #000); }
+        #sepSlider   { background: linear-gradient(to right, #ccc, #b5860d); }
+        #invSlider   { background: linear-gradient(to right, #1a6adb, #e44); }
+        #blurSlider  { background: linear-gradient(to right, #cce, #6699ff); }
+        #dropSlider  { background: linear-gradient(to right, #eee, #222); }
+
+        /* Toggle switches */
+        .toggle-row {
             display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 4px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
         }
+        .toggle-row:last-child { border-bottom: none; }
 
-        .action-btn {
-            padding: 9px 26px;
-            border: none;
-            border-radius: 99px;
-            font-family: 'Outfit', sans-serif;
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: transform 0.12s, filter 0.12s;
+            font-weight: 600;
+            color: #555;
         }
-        .action-btn:hover { transform: scale(1.04); filter: brightness(1.1); }
 
-        #resetBtn {
-            background: #1a6adb;
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            border-radius: 99px;
+            background: #ddd;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .toggle input:checked + .toggle-track { background: var(--accent); }
+        .toggle input:checked + .toggle-track::after { transform: translateX(20px); }
+
+        /* ── Copy toast ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #222;
             color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 99px;
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="page">
 
-    <!-- ══════════════════════════════════
-         Actual logo image from Desktop
-    ══════════════════════════════════ -->
-    <img
-        id="logoImg"
-        class="logo-img"
-        src="image.png"
-        alt="Tarvino Logo"
-    >
+    <!-- ══════════════════ LOGO PREVIEW CARD ══════════════════ -->
+    <div class="logo-card">
 
-    <h1 class="brand-name" id="brandName">Tarvino</h1>
-    <div class="brand-tagline">Private Limited</div>
-
-    <div class="divider"></div>
-
-    <div class="controls">
-
-        <!-- HUE -->
-        <div class="control-group">
-            <div class="slider-row">
-                <span class="slider-label">🎨 Color Hue</span>
-                <span class="slider-value" id="hueDisplay">0°</span>
-            </div>
-            <input type="range" id="hueSlider" min="0" max="360" value="0">
+        <div class="logo-preview-wrap">
+            <img id="logoImg" src="image.png" alt="Tarvino Logo">
         </div>
 
-        <!-- SATURATION -->
-        <div class="control-group">
-            <div class="slider-row">
-                <span class="slider-label">💧 Saturation</span>
-                <span class="slider-value" id="satDisplay">100%</span>
-            </div>
-            <input type="range" id="satSlider" min="0" max="200" value="100">
-        </div>
+        <h1 class="brand-name" id="brandName">Tarvino</h1>
+        <div class="brand-tagline">Private Limited</div>
 
-        <!-- BRIGHTNESS -->
-        <div class="control-group">
-            <div class="slider-row">
-                <span class="slider-label">☀️ Brightness</span>
-                <span class="slider-value" id="briDisplay">100%</span>
-            </div>
-            <input type="range" id="briSlider" min="20" max="200" value="100">
-        </div>
+        <div class="filter-badge" id="filterBadge">filter: none</div>
 
-        <div class="btn-row">
-            <button class="action-btn" id="resetBtn">↺ Reset Original</button>
+        <div class="action-row">
+            <button class="btn" id="resetBtn">↺ Reset</button>
+            <button class="btn" id="copyFilterBtn">⧉ Copy CSS</button>
         </div>
 
     </div>
+
+    <!-- ══════════════════ CONTROLS CARD ══════════════════ -->
+    <div class="controls-card">
+
+        <div class="panel-header">🎨 Color Grading Studio</div>
+
+        <div class="panel-body">
+
+            <!-- QUICK PRESETS -->
+            <div>
+                <div class="section-title">Quick Color Presets</div>
+                <div class="presets-wrap">
+                    <div class="presets-grid" id="presetsGrid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- HUE ROTATE -->
+            <div class="section-title" style="margin-bottom:0">Fine Controls</div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">🌈</span> Hue Rotate</span>
+                    <span class="slider-value" id="hueDisplay">0°</span>
+                </div>
+                <input type="range" id="hueSlider" min="0" max="360" value="0">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">💧</span> Saturation</span>
+                    <span class="slider-value" id="satDisplay">100%</span>
+                </div>
+                <input type="range" id="satSlider" min="0" max="300" value="100">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">☀️</span> Brightness</span>
+                    <span class="slider-value" id="briDisplay">100%</span>
+                </div>
+                <input type="range" id="briSlider" min="10" max="250" value="100">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">◑</span> Contrast</span>
+                    <span class="slider-value" id="conDisplay">100%</span>
+                </div>
+                <input type="range" id="conSlider" min="0" max="300" value="100">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">🟫</span> Sepia</span>
+                    <span class="slider-value" id="sepDisplay">0%</span>
+                </div>
+                <input type="range" id="sepSlider" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">🔃</span> Invert</span>
+                    <span class="slider-value" id="invDisplay">0%</span>
+                </div>
+                <input type="range" id="invSlider" min="0" max="100" value="0">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">🌫️</span> Blur</span>
+                    <span class="slider-value" id="blurDisplay">0px</span>
+                </div>
+                <input type="range" id="blurSlider" min="0" max="20" value="0" step="0.5">
+            </div>
+
+            <div class="control-group">
+                <div class="slider-row">
+                    <span class="slider-label"><span class="slider-icon">🌑</span> Drop Shadow</span>
+                    <span class="slider-value" id="dropDisplay">0px</span>
+                </div>
+                <input type="range" id="dropSlider" min="0" max="40" value="0">
+            </div>
+
+            <!-- TOGGLE EFFECTS -->
+            <div>
+                <div class="section-title">Special Effects</div>
+                <div class="toggle-row">
+                    <span class="toggle-label"><span>🔳</span> Greyscale</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="greyToggle">
+                        <span class="toggle-track"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span class="toggle-label"><span>✨</span> Opacity 50%</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="opacityToggle">
+                        <span class="toggle-track"></span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
+<!-- Toast notification -->
+<div class="toast" id="toast">✓ CSS filter copied!</div>
+
 <script>
-    const logoImg   = document.getElementById('logoImg');
-    const brandName = document.getElementById('brandName');
+    /* ══════════════════════════════════════
+       Elements
+    ══════════════════════════════════════ */
+    const logoImg       = document.getElementById('logoImg');
+    const brandName     = document.getElementById('brandName');
+    const filterBadge   = document.getElementById('filterBadge');
+    const resetBtn      = document.getElementById('resetBtn');
+    const copyFilterBtn = document.getElementById('copyFilterBtn');
+    const toast         = document.getElementById('toast');
 
-    const hueSlider = document.getElementById('hueSlider');
-    const satSlider = document.getElementById('satSlider');
-    const briSlider = document.getElementById('briSlider');
+    const hueSlider  = document.getElementById('hueSlider');
+    const satSlider  = document.getElementById('satSlider');
+    const briSlider  = document.getElementById('briSlider');
+    const conSlider  = document.getElementById('conSlider');
+    const sepSlider  = document.getElementById('sepSlider');
+    const invSlider  = document.getElementById('invSlider');
+    const blurSlider = document.getElementById('blurSlider');
+    const dropSlider = document.getElementById('dropSlider');
 
-    const hueDisplay = document.getElementById('hueDisplay');
-    const satDisplay = document.getElementById('satDisplay');
-    const briDisplay = document.getElementById('briDisplay');
+    const hueDisplay  = document.getElementById('hueDisplay');
+    const satDisplay  = document.getElementById('satDisplay');
+    const briDisplay  = document.getElementById('briDisplay');
+    const conDisplay  = document.getElementById('conDisplay');
+    const sepDisplay  = document.getElementById('sepDisplay');
+    const invDisplay  = document.getElementById('invDisplay');
+    const blurDisplay = document.getElementById('blurDisplay');
+    const dropDisplay = document.getElementById('dropDisplay');
 
-    const resetBtn  = document.getElementById('resetBtn');
+    const greyToggle    = document.getElementById('greyToggle');
+    const opacityToggle = document.getElementById('opacityToggle');
 
-    // Dynamic thumb style element
+    /* Dynamic style for thumb border */
     const thumbStyle = document.createElement('style');
     document.head.appendChild(thumbStyle);
 
+    /* ══════════════════════════════════════
+       Quick Presets
+    ══════════════════════════════════════ */
+    const PRESETS = [
+        { label: 'Original', hue:0,   sat:100, bri:100, con:100, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Crimson',  hue:160, sat:150, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Emerald',  hue:110, sat:130, bri:105, con:105, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Violet',   hue:200, sat:140, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Gold',     hue:330, sat:120, bri:110, con:105, sep:30, inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Rose',     hue:140, sat:140, bri:105, con:100, sep:20, inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Ocean',    hue:20,  sat:130, bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Sunset',   hue:320, sat:160, bri:110, con:120, sep:10, inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Arctic',   hue:50,  sat:70,  bri:115, con:90,  sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'Neon',     hue:90,  sat:300, bri:130, con:130, sep:0,  inv:0,  blur:0, drop:0, grey:false },
+        { label: 'B&W',      hue:0,   sat:0,   bri:100, con:110, sep:0,  inv:0,  blur:0, drop:0, grey:true  },
+        { label: 'Invert',   hue:0,   sat:100, bri:100, con:100, sep:0,  inv:100,blur:0, drop:0, grey:false },
+    ];
+
+    /* Compute a representative swatch color for each preset */
+    function presetSwatchColor(p) {
+        if (p.grey) return '#888';
+        if (p.inv === 100) return '#333';
+        const baseHue = (210 + p.hue) % 360;
+        return `hsl(${baseHue}, ${Math.min(p.sat, 100)}%, 50%)`;
+    }
+
+    const presetsGrid = document.getElementById('presetsGrid');
+
+    PRESETS.forEach((p, i) => {
+        const el = document.createElement('div');
+        el.className = 'preset-swatch';
+        el.style.background = presetSwatchColor(p);
+        el.title = p.label;
+        el.innerHTML = `<span class="swatch-label">${p.label}</span>`;
+        el.addEventListener('click', () => applyPreset(p, el));
+        presetsGrid.appendChild(el);
+        if (i === 0) el.classList.add('active');
+    });
+
+    function applyPreset(p, el) {
+        hueSlider.value  = p.hue;
+        satSlider.value  = p.sat;
+        briSlider.value  = p.bri;
+        conSlider.value  = p.con;
+        sepSlider.value  = p.sep;
+        invSlider.value  = p.inv;
+        blurSlider.value = p.blur;
+        dropSlider.value = p.drop;
+        greyToggle.checked    = p.grey;
+        opacityToggle.checked = false;
+
+        document.querySelectorAll('.preset-swatch').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+
+        updateFilter();
+    }
+
+    /* ══════════════════════════════════════
+       Core: Build & Apply Filter
+    ══════════════════════════════════════ */
     function updateFilter() {
-        const hue = +hueSlider.value;
-        const sat = +satSlider.value;
-        const bri = +briSlider.value;
+        const hue  = +hueSlider.value;
+        const sat  = +satSlider.value;
+        const bri  = +briSlider.value;
+        const con  = +conSlider.value;
+        const sep  = +sepSlider.value;
+        const inv  = +invSlider.value;
+        const blur = +blurSlider.value;
+        const drop = +dropSlider.value;
+        const grey = greyToggle.checked;
+        const opa  = opacityToggle.checked;
 
-        hueDisplay.textContent = hue + '°';
-        satDisplay.textContent = sat + '%';
-        briDisplay.textContent = bri + '%';
+        /* Display values */
+        hueDisplay.textContent  = hue  + '°';
+        satDisplay.textContent  = sat  + '%';
+        briDisplay.textContent  = bri  + '%';
+        conDisplay.textContent  = con  + '%';
+        sepDisplay.textContent  = sep  + '%';
+        invDisplay.textContent  = inv  + '%';
+        blurDisplay.textContent = blur + 'px';
+        dropDisplay.textContent = drop + 'px';
 
-        // Apply CSS filter to the actual logo image
-        logoImg.style.filter =
-            `hue-rotate(${hue}deg) saturate(${sat}%) brightness(${bri}%)`;
+        /* Build filter string */
+        const parts = [
+            `hue-rotate(${hue}deg)`,
+            `saturate(${sat}%)`,
+            `brightness(${bri}%)`,
+            `contrast(${con}%)`,
+        ];
+        if (sep  > 0) parts.push(`sepia(${sep}%)`);
+        if (inv  > 0) parts.push(`invert(${inv}%)`);
+        if (blur > 0) parts.push(`blur(${blur}px)`);
+        if (drop > 0) parts.push(`drop-shadow(0 ${drop/2}px ${drop}px rgba(0,0,0,0.45))`);
+        if (grey)     parts.push(`grayscale(100%)`);
 
-        // Compute a representative hue for UI accents
-        // Logo is originally blue (hue ~210), so add the rotation
+        const filterStr = parts.join(' ');
+
+        logoImg.style.filter  = filterStr;
+        logoImg.style.opacity = opa ? '0.5' : '1';
+
+        filterBadge.textContent = 'filter: ' + filterStr;
+
+        /* Update UI accent to match logo hue */
         const uiHue = (210 + hue) % 360;
-        const accentColor = `hsl(${uiHue}, 80%, 38%)`;
+        const accent = `hsl(${uiHue}, 80%, 40%)`;
 
-        brandName.style.color = `hsl(${uiHue}, 80%, 16%)`;
-        resetBtn.style.background = accentColor;
+        brandName.style.color      = `hsl(${uiHue}, 80%, 16%)`;
+        resetBtn.style.background  = accent;
+        document.documentElement.style.setProperty('--accent', accent);
 
         thumbStyle.textContent = `
-            input[type=range]::-webkit-slider-thumb { border-color: ${accentColor}; }
-            input[type=range]::-moz-range-thumb     { border-color: ${accentColor}; }
+            input[type=range]::-webkit-slider-thumb { border-color: ${accent}; }
+            input[type=range]::-moz-range-thumb     { border-color: ${accent}; }
         `;
     }
 
-    hueSlider.addEventListener('input', updateFilter);
-    satSlider.addEventListener('input', updateFilter);
-    briSlider.addEventListener('input', updateFilter);
-
-    resetBtn.addEventListener('click', () => {
-        hueSlider.value = 0;
-        satSlider.value = 100;
-        briSlider.value = 100;
-        updateFilter();
+    /* ══════════════════════════════════════
+       Event listeners
+    ══════════════════════════════════════ */
+    [hueSlider, satSlider, briSlider, conSlider,
+     sepSlider, invSlider, blurSlider, dropSlider].forEach(s => {
+        s.addEventListener('input', () => {
+            // Deselect preset swatches when manually adjusted
+            document.querySelectorAll('.preset-swatch').forEach(el => el.classList.remove('active'));
+            updateFilter();
+        });
     });
 
-    // Init
+    [greyToggle, opacityToggle].forEach(t => {
+        t.addEventListener('change', updateFilter);
+    });
+
+    resetBtn.addEventListener('click', () => {
+        applyPreset(PRESETS[0], presetsGrid.children[0]);
+    });
+
+    copyFilterBtn.addEventListener('click', () => {
+        const txt = filterBadge.textContent;
+        navigator.clipboard.writeText(txt).then(() => showToast('✓ CSS filter copied!')).catch(() => {
+            showToast('⚠ Copy failed — try manually');
+        });
+    });
+
+    function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    /* Init */
     updateFilter();
 </script>
 
